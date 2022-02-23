@@ -1,4 +1,4 @@
-// Employee class
+const Employee = require("../lib/employee");
 
 class Employee {
   constructor(name, email, id) {

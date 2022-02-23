@@ -1,9 +1,20 @@
-//
+// employee classes
+const teamManager = require("./lib/teamManager");
+const Engineer = require("./lib/engineer");
+const Intern = require("./lib/intern");
+
+//Inquirer
 const inquirer = require("inquirer");
+
+// file paths
+const path = require("path");
 const fs = require("fs");
+
+// html generator
 const generateHTML = require("generateHTML");
 const { userInfo } = require("os");
 
+// Employee to be pushed into empty array
 const teamPosition = [];
 
 // prompt for position

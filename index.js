@@ -33,4 +33,12 @@ const promptAdditionalInfo = (position) => {
   }
 };
 
-const addNewEmployee = () 
+const addNewEmployee = () => {
+  console.clear();
+  promptPosition().then((userInfo) => {
+    const { position } = userInfo;
+    promptAdditionalInfo(position);
+  });
+};
+
+promptAdditionalInfo("Team Manager");

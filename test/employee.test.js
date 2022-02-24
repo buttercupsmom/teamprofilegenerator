@@ -1,27 +1,31 @@
 const Employee = require("../lib/employee");
 
-class Employee {
-  constructor(name, email, id) {
-    this.name = name;
-    if (email.match(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)) {
-      this.email;
-    } else {
-      this.email = "Please enter valid email.";
-    }
-    this.id = id;
-  }
-  acquireName() {
-    return this.name;
-  }
-  acquireEmail() {
-    return this.email;
-  }
-  acquireId() {
-    return this.id;
-  }
-  acquirePosition() {
-    return this.position;
-  }
-}
+describle("Employee", () => {
+  describe("acquireName", () => {
+    it("should return the Employee name", () => {
+      const expect = "Bob";
+      const result = new Employee("Bob", 3, "bob@mail.com").acquireName;
+      expect(result).toEqual(expect);
+    });
+  });
+});
 
-module.exports = Employee;
+describle("email", () => {
+  describe("acquireEmail", () => {
+    it("should return the email of Employee", () => {
+      const expect = "bob@mail.com";
+      const result = new Employee("Bob", 3, "bob@mail.com").acquireEmail;
+      expect(result).toEqual(expect);
+    });
+  });
+});
+
+describle("id", () => {
+  describe("acquireId", () => {
+    it("should return the id of Employee", () => {
+      const expect = "3";
+      const result = new Employee("Bob", 1, "bob@mail.com").acquireId;
+      expect(result).toEqual(expect);
+    });
+  });
+});

@@ -1,6 +1,6 @@
 const Employee = require("../lib/employee");
 
-describle("Employee", () => {
+describe("Employee", () => {
   describe("acquireName", () => {
     it("should return the Employee name", () => {
       const expect = "Bob";
@@ -10,7 +10,7 @@ describle("Employee", () => {
   });
 });
 
-describle("email", () => {
+describe("email", () => {
   describe("acquireEmail", () => {
     it("should return the email of Employee", () => {
       const expect = "bob@mail.com";
@@ -20,7 +20,7 @@ describle("email", () => {
   });
 });
 
-describle("id", () => {
+describe("id", () => {
   describe("acquireId", () => {
     it("should return the id of Employee", () => {
       const expect = "3";

@@ -21,73 +21,114 @@ const officeTeam = [];
 
 // prompt for position
 const promptOfficeData = () => {
-  return inquirer.prompt([
-    {
-      type: "input",
-      name: "name",
-      message: "What is your name?",
-      validate: (acquireName) => {
-        if (acquireName) {
-          return true;
-        } else {
-          console.log("Enter your name!");
-          return false;
-        }
+  return inquirer
+    .prompt([
+      {
+        type: "input",
+        name: "name",
+        message: "What is your name?",
+        validate: (acquireName) => {
+          if (acquireName) {
+            return true;
+          } else {
+            console.log("Enter your name!");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "email",
-      message: "What is your email?",
-      validate: (acquireEmail) => {
-        if (acquireEmail) {
-          return true;
-        } else {
-          console.log("Enter your Email!");
-          return false;
-        }
+      {
+        type: "input",
+        name: "email",
+        message: "What is your email?",
+        validate: (acquireEmail) => {
+          if (acquireEmail) {
+            return true;
+          } else {
+            console.log("Enter your Email!");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "employeeId",
-      message: "Please enter your employee Id.",
-      validate: (acquireId) => {
-        if (acquireId) {
-          return true;
-        } else {
-          console.log("Please enter your employee ID!");
-          return false;
-        }
+      {
+        type: "input",
+        name: "employeeId",
+        message: "Please enter your employee Id.",
+        validate: (acquireId) => {
+          if (acquireId) {
+            return true;
+          } else {
+            console.log("Please enter your employee ID!");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "officeNumber",
-      when: () => employeeType === officeManager,
-      message: "Please enter your office number.",
-      validate: (officeNumber) => {
-        if (officeNumber) {
-          return true;
-        } else {
-          console.log("Enter your office number.");
-          return false;
-        }
+      {
+        type: "input",
+        name: "officeNumber",
+        when: () => employeeType === officeManager,
+        message: "Please enter your office number.",
+        validate: (officeNumber) => {
+          if (officeNumber) {
+            return true;
+          } else {
+            console.log("Enter your office number.");
+            return false;
+          }
+        },
       },
-    },
-    {
-      type: "input",
-      name: "github",
-      when: () => employeeType === officeEngineer,
-      message: "Please enter your GitHub username.",
-    },
-    {
-      type: "input",
-      name: "school",
-      when: () => employeeType === officeIntern,
-      message: "Please enter your College or University.",
-    },
-  ]);
+      {
+        type: "input",
+        name: "githubName",
+        when: () => employeeType === officeEngineer,
+        message: "Please enter your GitHub username.",
+      },
+      {
+        type: "input",
+        name: "school",
+        when: () => employeeType === officeIntern,
+        message: "Please enter your College or University.",
+      },
+    ])
+    .then((answers) => {
+      // questions response answers
+      switch (employeeType) {
+        case officeManager:
+          // create manager object
+          const Manager = new Manager(
+            answers.name,
+            answers.email,
+            answers.id,
+            answers.officenumber
+          );
+          officeTeam.push(Manager);
+          promptMenu();
+          break;
+        case officeEngineer:
+          // create engineer object
+          const Engineer = new Engineer(
+            answers.name,
+            answers.email,
+            answers.id,
+            answers.officenumber,
+            answer.github
+          );
+          officeTeam.push(Engineer);
+          promptMenu();
+          break;
+        case officeManager:
+          // create intern object
+          const Intern = new Intern(
+            answers.name,
+            answers.email,
+            answers.id,
+            answers.officenumber,
+            answers.school
+          );
+          officeTeam.push(Intern);
+          promptMenu();
+          break;
+      }
+    });
 };
 
 // Prompt prompt menu
@@ -106,7 +147,7 @@ const promptMenu = () => {
         case "add Engineer":
           promptOfficeData();
           break;
-        case "add Inten":
+        case "add Intern":
           promptOfficeData();
           break;
         default:

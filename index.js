@@ -1,17 +1,15 @@
 //Inquirer
 const inquirer = require("inquirer");
-const path = require("path");
 const fs = require("fs");
-// html generator
-const generateHTML = {};
-const { userInfo } = require("os");
-const Employee = require("./lib/employee");
-const OUTPUT_DIR = path.resolve(_dirname, "output");
-const outputPath = path.join(OUTPUT_DIR, "staff.html");
+
+const siteGenerate = [];
+const output_dir = path.resolve(_dirname, "output");
+const outputSite = path.join(output_dir, "company.html");
 // employee paths
 const Manager = require("./lib/teamManager");
 const Engineer = require("./lib/engineer");
 const Intern = require("./lib/intern");
+const createHtml = require("create-html");
 // positions
 const officeManager = Manager;
 const officeEngineer = Engineer;
@@ -92,7 +90,7 @@ const promptOfficeData = () => {
     .then((answers) => {
       // questions response answers
       switch (employeeType) {
-        case officeManager:
+        case Manager:
           // create manager object
           const Manager = new Manager(
             answers.name,
@@ -103,25 +101,23 @@ const promptOfficeData = () => {
           officeTeam.push(Manager);
           promptMenu();
           break;
-        case officeEngineer:
+        case Engineer:
           // create engineer object
           const Engineer = new Engineer(
             answers.name,
             answers.email,
             answers.id,
-            answers.officenumber,
             answer.github
           );
           officeTeam.push(Engineer);
           promptMenu();
           break;
-        case officeManager:
+        case Intern:
           // create intern object
           const Intern = new Intern(
             answers.name,
             answers.email,
             answers.id,
-            answers.officenumber,
             answers.school
           );
           officeTeam.push(Intern);
@@ -145,27 +141,46 @@ const promptMenu = () => {
     .then((userPick) => {
       switch (userPick.menu) {
         case "add Engineer":
-          promptOfficeData();
+          promptOfficeData(Engineer);
           break;
         case "add Intern":
-          promptOfficeData();
+          promptOfficeData(Intern);
           break;
+        case "Build Your Office Team!":
+          generateHTML(officeTeam);
         default:
-          assembleTeam();
+          throw new Error("Choice not applicable.");
+          break;
       }
     });
 };
 
-// assemble team
-const assembleTeam = () => {
-  console.log("Assemble my Team!!");
+// either make card for each position or conditionals
+function makeCard(worker) {
+  let cardHTML = "";
+  // loop
+  workers.forEach((worker) => {
+    console.log(worker);
+    // this will be a div with css attributes
+    cardHTML += `<div>My name is ${worker.name}</div`;
+  });
+  return cardHTML;
+}
 
-  if (!fs.existsSync(OUTPUT_DIR)) {
-    fs.mkdirSync(OUTPUT_DIR);
+// assemble team
+const assembleOfficeTeam = () => {
+  if (!fs.existsSync(output_dir)) {
+    fs.mkdirSync(output_dir);
   }
-  fs.writeFileSync(outputPath, generateHTML(officeTeam), "utf-8");
+  fs.writeFileSync(outputSite, siteGenerate(officeTeam), "utf-8");
+  console.log("Assemble my Team!!");
 };
 // const generateHtml()
+const generateHTML = (employees) => {
+  // pass an array of employees
+  console.log() // html index info // template literal will go in body of html
+  `${makeCard(employees)}`;
+};
 
 // write file to generate
 

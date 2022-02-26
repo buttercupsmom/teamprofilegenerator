@@ -1,15 +1,11 @@
 //Inquirer
 const inquirer = require("inquirer");
 const fs = require("fs");
-
-const siteGenerate = [];
-const output_dir = path.resolve(_dirname, "output");
-const outputSite = path.join(output_dir, "company.html");
 // employee paths
 const Manager = require("./lib/teamManager");
 const Engineer = require("./lib/engineer");
 const Intern = require("./lib/intern");
-const createHtml = require("create-html");
+// const createHtml = require("create-html");
 // positions
 const officeManager = Manager;
 const officeEngineer = Engineer;
@@ -138,13 +134,13 @@ const promptMenu = () => {
         choices: ["Engineer", "Intern", "Build Your Team!"],
       },
     ])
-    .then((userPick) => {
-      switch (userPick.menu) {
+    .then((answers) => {
+      switch (answers.menu) {
         case "add Engineer":
-          promptOfficeData(Engineer);
+          promptOfficeData(officeEngineer);
           break;
         case "add Intern":
-          promptOfficeData(Intern);
+          promptOfficeData(officeIntern);
           break;
         case "Build Your Office Team!":
           generateHTML(officeTeam);
@@ -155,33 +151,110 @@ const promptMenu = () => {
     });
 };
 
-// either make card for each position or conditionals
-function makeCard(worker) {
+// either make card for each staff position or conditionals
+function makeCard(staff) {
   let cardHTML = "";
   // loop
-  workers.forEach((worker) => {
-    console.log(worker);
+  // conditional in for each loop
+  staff.forEach((staff) => {
+    console.log(staff);
     // this will be a div with css attributes
-    cardHTML += `<div>My name is ${worker.name}</div`;
+    cardHTML += `<div>My name is ${staff.acquireName()}.</div`;
   });
   return cardHTML;
 }
 
-// assemble team
-const assembleOfficeTeam = () => {
-  if (!fs.existsSync(output_dir)) {
-    fs.mkdirSync(output_dir);
-  }
-  fs.writeFileSync(outputSite, siteGenerate(officeTeam), "utf-8");
-  console.log("Assemble my Team!!");
-};
-// const generateHtml()
 const generateHTML = (employees) => {
-  // pass an array of employees
-  console.log() // html index info // template literal will go in body of html
-  `${makeCard(employees)}`;
+  const fileHTML = `<!DOCTYPE html>
+  <html lang="en">
+  
+  <head>
+      <meta charset="UTF-8">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Team Profile Generator</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
+          rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
+          crossorigin="anonymous">">
+  </head>
+  
+  <body>
+      <div class="card" style="width: 18rem;">
+          <div class="card-header">
+           </br>
+          </div>
+         ${makeCard(employees)}
+      </div>
+  </body>
+  
+  </html>`;
+  fs.writeFile("./output/index.html", fileHTML, (err) =>
+    err ? console.log(err) : console.log("HTML generated successfully!")
+  );
 };
 
-// write file to generate
+// const generateHtml()
+const generateEmployee = (employee) => {
+  console.log(employee);
+  const index = [];
 
-promptMenu();
+  const createManager = (Manager) => {
+    console.log(Manager);
+    let managerIndex = `
+        <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            ${Manager.name}</br>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">${Manager.email}</li>
+            <li class="list-group-item">${Manager.employeeId}</li>
+            <li class="list-group-item">${Manager.officeNumber}</li>
+        </ul>
+    </div>`;
+    index.push(managerIndex);
+  };
+
+  const createEngineer = (Engineer) => {
+    console.log(Engineer);
+    let engineerIndex = `
+            <div class="card" style="width: 18rem;">
+            <div class="card-header">
+                ${Engineer.name}</br>
+            </div>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item">${Engineer.email}</li>
+                <li class="list-group-item">${Engineer.employeeId}</li>
+                <li class="list-group-item">${Engineer.githubName}</li>
+            </ul>
+        </div>`;
+    index.push(engineerIndex);
+  };
+  const createIntern = (Intern) => {
+    console.log(Intern);
+    let internIndex = `
+        <div class="card" style="width: 18rem;">
+        <div class="card-header">
+            ${Intern.name}</br>
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item">${Intern.email}</li>
+            <li class="list-group-item">${Intern.employeeId}</li>
+            <li class="list-group-item">${Intern.school}</li>
+        </ul>
+    </div>`;
+    index.push(internIndex);
+  };
+  // conditional for loop for staff
+  for (let i = 0; i < employee.length; i++) {
+    if (employee[i].acquirePosition === "Manager") {
+      createManager(employee[i]);
+    }
+    if (employee[i].acquirePosition === "Engineer") {
+      createEngineer(employee[i]);
+    }
+    if (employee[i].acquirePosition === "Intern") {
+      createIntern(employee[i]);
+    }
+  }
+  return index.join("");
+};

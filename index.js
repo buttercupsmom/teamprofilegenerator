@@ -2,21 +2,27 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 // employee paths
+const Employee = require("./lib/employee");
 const Manager = require("./lib/teamManager");
 const Engineer = require("./lib/engineer");
 const Intern = require("./lib/intern");
-// const createHtml = require("create-html");
-// positions
-const officeManager = Manager;
-const officeEngineer = Engineer;
-const officeIntern = Intern;
+// // positions
+// const officeManager = Manager;
+// const officeEngineer = Engineer;
+// const officeIntern = Intern;
 // Employee to be pushed into empty array
-const officeTeam = [];
+const officeStaff = [];
 
 // prompt for position
-const promptOfficeData = () => {
-  return inquirer
+function officeData() {
+  inquirer
     .prompt([
+      {
+        type: "list",
+        name: "position",
+        message: "What is the title of the employee you wish to add?",
+        choices: ["Manager", "Engineer", "Intern", "Build Your Team!"],
+      },
       {
         type: "input",
         name: "name",
@@ -59,7 +65,7 @@ const promptOfficeData = () => {
       {
         type: "input",
         name: "officeNumber",
-        when: () => employeeType === officeManager,
+        when: (answers) => answers.position === "Manager",
         message: "Please enter your office number.",
         validate: (officeNumber) => {
           if (officeNumber) {
@@ -73,40 +79,42 @@ const promptOfficeData = () => {
       {
         type: "input",
         name: "githubName",
-        when: () => employeeType === officeEngineer,
+        when: (answers) => answers.position === "Engineer",
         message: "Please enter your GitHub username.",
       },
       {
         type: "input",
         name: "school",
-        when: () => employeeType === officeIntern,
+        when: (answers) => answers.position === "Intern",
         message: "Please enter your College or University.",
       },
     ])
     .then((answers) => {
       // questions response answers
-      switch (employeeType) {
+      switch (answers.position) {
         case Manager:
           // create manager object
           const Manager = new Manager(
             answers.name,
             answers.email,
             answers.id,
-            answers.officenumber
+            answers.officeNumber
           );
-          officeTeam.push(Manager);
-          promptMenu();
+          officeStaff.push(Manager);
+          officeData();
           break;
+
         case Engineer:
           // create engineer object
           const Engineer = new Engineer(
             answers.name,
             answers.email,
             answers.id,
-            answer.github
+            answer.githubName
           );
-          officeTeam.push(Engineer);
-          promptMenu();
+          console.log(employees);
+          officeStaff.push(Engineer);
+          officeData();
           break;
         case Intern:
           // create intern object
@@ -116,41 +124,31 @@ const promptOfficeData = () => {
             answers.id,
             answers.school
           );
-          officeTeam.push(Intern);
-          promptMenu();
+          officeStaff.push(Intern);
+          officeData();
           break;
       }
     });
-};
+}
+officeData();
 
 // Prompt prompt menu
-const promptMenu = () => {
-  return inquirer
-    .prompt([
-      {
-        type: "list",
-        name: "position",
-        message: "What is the title of the employee you wish to add?",
-        choices: ["Engineer", "Intern", "Build Your Team!"],
-      },
-    ])
-    .then((answers) => {
-      switch (answers.menu) {
-        case "add Engineer":
-          promptOfficeData(officeEngineer);
+function promptMenu() {
+  if (officeData === true) {
+    (userChoice) => {
+      switch (userChoice.menu) {
+        case "Add Engineer":
+          officeData(Engineer);
           break;
-        case "add Intern":
-          promptOfficeData(officeIntern);
+        case "Add Intern":
+          officeData(Intern);
           break;
-        case "Build Your Office Team!":
-          generateHTML(officeTeam);
         default:
-          throw new Error("Choice not applicable.");
-          break;
+          createStaff();
       }
-    });
-};
-
+    };
+  }
+}
 // either make card for each staff position or conditionals
 function makeCard(staff) {
   let cardHTML = "";
@@ -183,6 +181,7 @@ const generateHTML = (employees) => {
           <div class="card-header">
            </br>
           </div>
+         ${generateEmployees(employees)}</br>
          ${makeCard(employees)}
       </div>
   </body>
@@ -193,68 +192,10 @@ const generateHTML = (employees) => {
   );
 };
 
-// const generateHtml()
-const generateEmployee = (employee) => {
-  console.log(employee);
-  const index = [];
-
-  const createManager = (Manager) => {
-    console.log(Manager);
-    let managerIndex = `
-        <div class="card" style="width: 18rem;">
-        <div class="card-header">
-            ${Manager.name}</br>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">${Manager.email}</li>
-            <li class="list-group-item">${Manager.employeeId}</li>
-            <li class="list-group-item">${Manager.officeNumber}</li>
-        </ul>
-    </div>`;
-    index.push(managerIndex);
-  };
-
-  const createEngineer = (Engineer) => {
-    console.log(Engineer);
-    let engineerIndex = `
-            <div class="card" style="width: 18rem;">
-            <div class="card-header">
-                ${Engineer.name}</br>
-            </div>
-            <ul class="list-group list-group-flush">
-                <li class="list-group-item">${Engineer.email}</li>
-                <li class="list-group-item">${Engineer.employeeId}</li>
-                <li class="list-group-item">${Engineer.githubName}</li>
-            </ul>
-        </div>`;
-    index.push(engineerIndex);
-  };
-  const createIntern = (Intern) => {
-    console.log(Intern);
-    let internIndex = `
-        <div class="card" style="width: 18rem;">
-        <div class="card-header">
-            ${Intern.name}</br>
-        </div>
-        <ul class="list-group list-group-flush">
-            <li class="list-group-item">${Intern.email}</li>
-            <li class="list-group-item">${Intern.employeeId}</li>
-            <li class="list-group-item">${Intern.school}</li>
-        </ul>
-    </div>`;
-    index.push(internIndex);
-  };
-  // conditional for loop for staff
-  for (let i = 0; i < employee.length; i++) {
-    if (employee[i].acquirePosition === "Manager") {
-      createManager(employee[i]);
-    }
-    if (employee[i].acquirePosition === "Engineer") {
-      createEngineer(employee[i]);
-    }
-    if (employee[i].acquirePosition === "Intern") {
-      createIntern(employee[i]);
-    }
-  }
-  return index.join("");
+const createStaff = () => {
+  console.log(`Staff Assembled!`);
+  generateHTML();
 };
+
+// module.exports = inquirer;
+promptMenu();

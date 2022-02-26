@@ -91,47 +91,39 @@ function officeData() {
     ])
     .then((answers) => {
       // questions response answers
-      switch (answers.position) {
-        case Manager:
-          // create manager object
-          const Manager = new Manager(
-            answers.name,
-            answers.email,
-            answers.id,
-            answers.officeNumber
-          );
-          officeStaff.push(Manager);
-          officeData();
-          break;
+      if (answers.position.addNewPosition === "Manager") {
+        // create manager object
+        const Manager = new Manager(
+          answers.name,
+          answers.email,
+          answers.id,
+          answers.officeNumber
+        );
+        officeStaff.push(Manager);
+        officeData();
+      } else if (answers.position.addNewPosition === "Engineer") {
+        const Engineer = new Engineer(
+          answers.name,
+          answers.email,
+          answers.id,
+          answers.githubName
+        );
 
-        case Engineer:
-          // create engineer object
-          const Engineer = new Engineer(
-            answers.name,
-            answers.email,
-            answers.id,
-            answer.githubName
-          );
-          console.log(employees);
-          officeStaff.push(Engineer);
-          officeData();
-          break;
-        case Intern:
-          // create intern object
-          const Intern = new Intern(
-            answers.name,
-            answers.email,
-            answers.id,
-            answers.school
-          );
-          officeStaff.push(Intern);
-          officeData();
-          break;
+        officeStaff.push(Engineer);
+        officeData();
+      } else if (answers.position.addNewPosition === "Intern") {
+        const Intern = new Intern(
+          answers.name,
+          answers.email,
+          answers.id,
+          answers.school
+        );
+        officeStaff.push(Intern);
+        officeData();
       }
     });
+  officeData();
 }
-officeData();
-
 // Prompt prompt menu
 function promptMenu() {
   if (officeData === true) {
@@ -149,20 +141,43 @@ function promptMenu() {
     };
   }
 }
+function generateUnique() {
+  if (employee.acquirePosition() === "Manager") {
+    return ` <li class="list-group-item">${employee.officeNumber}</li>
+    `;
+  } else if (employee.acquirePosition() === "Engineer") {
+    return `<li class="list-group-item">
+    ${employee.githubName}</li>`;
+  } else if (employee.acquirePosition() === "Intern") {
+    return `<li class="list-group-item">
+    ${employee.githubName}</li>`;
+  }
+}
+
 // either make card for each staff position or conditionals
 function makeCard(staff) {
   let cardHTML = "";
   // loop
   // conditional in for each loop
   staff.forEach((staff) => {
-    console.log(staff);
+    console.log();
     // this will be a div with css attributes
-    cardHTML += `<div>My name is ${staff.acquireName()}.</div`;
+    cardHTML += `<div class="card" style="width: 18rem;">
+    <div class="card-header">
+        ${answers.name}</br>
+    </div>
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item">${answers.email}</li>
+        <li class="list-group-item">${answers.employeeId}</li>
+        <li class="list-group-item">${answers.officeNumber}</li>
+        ${generateSpecial(staff)}
+    </ul>
+    `;
   });
   return cardHTML;
 }
 
-const generateHTML = (employees) => {
+const generateHTML = (employee) => {
   const fileHTML = `<!DOCTYPE html>
   <html lang="en">
   
@@ -177,19 +192,22 @@ const generateHTML = (employees) => {
   </head>
   
   <body>
-      <div class="card" style="width: 18rem;">
-          <div class="card-header">
-           </br>
-          </div>
-         ${generateEmployees(employees)}</br>
-         ${makeCard(employees)}
-      </div>
+  <div class="card" style="width: 18rem;">
+  <div class="card-header">
+      ${employee.name}</br>
+  </div>
+  <ul class="list-group list-group-flush">
+      <li class="list-group-item">${employee.email}</li>
+      <li class="list-group-item">${employee.employeeId}</li>
+      <li class="list-group-item">${employee.officeNumber}</li>
+  </ul>
   </body>
   
   </html>`;
   fs.writeFile("./output/index.html", fileHTML, (err) =>
     err ? console.log(err) : console.log("HTML generated successfully!")
   );
+  return makeCard();
 };
 
 const createStaff = () => {

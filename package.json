@@ -3,12 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "directories": {
-    "lib": "lib",
-    "test": "test"
-  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest",
+    "testManager": "jest ./testing/teamManager.test.js",
+    "testEmployee": "jest ./testing/employee.test.js",
+    "testIntern": "jest ./testing/intern.test.js",
+    "testEngineer": "jest ./testing/engineer.test.js"
   },
   "repository": {
     "type": "git",

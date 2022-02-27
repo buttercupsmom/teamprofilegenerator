@@ -8,20 +8,20 @@ describe(`intern`, () => {
 });
 
 it(`should set name via the constructor`, () => {
-  const employee = new Manager(
-    "Kenneth Parcel",
-    3,
+  const employee = new Intern(
+    "Kenneth Parcell",
     "kennethparcell@30rock.com",
+    3,
     "University of NBC Page Department"
   );
-  expect(employee.name).toBe("Tracy Jordan");
+  expect(employee.name).toBe("Kenneth Parcell");
 });
 
 it(`should return intern's name when acquireName method is called`, () => {
   const employee = new Intern(
     "Kenneth Parcell",
-    3,
     "kennethparcell@30rock.com",
+    3,
     "University of NBC Page Department"
   );
   expect(employee.acquireName()).toBe("Kenneth Parcell");
@@ -29,9 +29,9 @@ it(`should return intern's name when acquireName method is called`, () => {
 
 it(`should return the employee's email when acquireEmail method is called`, () => {
   const employee = new Intern(
-    "Kenneth Parcell",
-    3,
+    "Kenneth Parcel",
     "kennethparcell@30rock.com",
+    3,
     "University of NBC Page Department"
   );
   expect(employee.acquireEmail()).toBe("kennethparcell@30rock.com");
@@ -39,9 +39,9 @@ it(`should return the employee's email when acquireEmail method is called`, () =
 
 it(`should return employee's Id when acquireId method is called`, () => {
   const employee = new Intern(
-    "Kenneth Parcell",
-    3,
+    "Kenneth Parcel",
     "kennethparcell@30rock.com",
+    3,
     "University of NBC Page Department"
   );
   expect(employee.acquireId()).toBe(3);
@@ -49,9 +49,9 @@ it(`should return employee's Id when acquireId method is called`, () => {
 
 it(`should return employee's college of university when acquireSchool method is called`, () => {
   const employee = new Intern(
-    "Kenneth Parcell",
-    3,
+    "Kenneth Parcel",
     "kennethparcell@30rock.com",
+    3,
     "University of NBC Page Department"
   );
   expect(employee.acquireSchool()).toBe("University of NBC Page Department");
@@ -59,9 +59,9 @@ it(`should return employee's college of university when acquireSchool method is 
 
 it(`should return position when acquirePosition method is called`, () => {
   const employee = new Intern(
-    "Kenneth Parcell",
-    3,
+    "Kenneth Parcel",
     "kennethparcell@30rock.com",
+    3,
     "University of NBC Page Department"
   );
   expect(employee.acquirePosition()).toBe("Intern");

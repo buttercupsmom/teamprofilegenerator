@@ -2,7 +2,7 @@
 const inquirer = require("inquirer");
 const fs = require("fs");
 // employee paths
-const Employee = require("./lib/employee");
+// const Employee = require("./lib/employee");
 const Manager = require("./lib/teamManager");
 const Engineer = require("./lib/engineer");
 const Intern = require("./lib/intern");
@@ -17,60 +17,31 @@ function officeData() {
         type: "list",
         name: "position",
         message: "What is the title of the employee you wish to add?",
-        choices: ["Engineer", "Intern", "Build Your Team!"],
+        choices: ["Manager", "Engineer", "Intern", "Build Your Team!"],
       },
       {
         type: "input",
         name: "name",
+        when: (answers) => answers.position != "Build Your Team!",
         message: "What their name?",
-        validate: (nameInput) => {
-          if (nameInput) {
-            return true;
-          } else {
-            console.log("Please enter your employee's name.");
-            return false;
-          }
-        },
       },
       {
         type: "input",
         name: "email",
+        when: (answers) => answers.position != "Build Your Team!",
         message: "What is their email?",
-        validate: (email) => {
-          if (email) {
-            return true;
-          } else {
-            console.log("Please enter your employee's email.");
-            return false;
-          }
-        },
       },
       {
         type: "input",
         name: "employeeId",
+        when: (answers) => answers.position != "Build Your Team!",
         message: "Please your employee's Id.",
-        validate: (employeeId) => {
-          if (employeeId) {
-            return true;
-          } else {
-            console.log("Please enter your employee ID!");
-            return false;
-          }
-        },
       },
       {
         type: "input",
         name: "officeNumber",
         when: (answers) => answers.position === "Manager",
         message: "Please enter your office number.",
-        validate: (acquireofficeNumber) => {
-          if (acquireofficeNumber) {
-            return true;
-          } else {
-            console.log("Enter your office number.");
-            return false;
-          }
-        },
       },
       {
         type: "input",
@@ -117,41 +88,41 @@ function officeData() {
         officeData();
       } else {
         const staffAssemble = generateHTML();
-
-        fs.writeFile("./output/index.html", staffAssemble, (err) =>
+        console.log(staffAssemble);
+        fs.writeFile("index.html", staffAssemble, (err) =>
           err ? console.log(err) : console.log("HTML generated successfully!")
         );
       }
     });
 }
 
-function generateUnique() {
+function generateUnique(employee) {
   if (employee.acquirePosition() === "Manager") {
-    return `<li class="list-group-item">${employee.officeNumber}</li>`;
+    return `<p class="card-text">${employee.officeNumber}</p></br>`;
   } else if (employee.acquirePosition() === "Engineer") {
-    return `<li class="list-group-item">${employee.githubName}</li>`;
+    return `<p class="card-text">${employee.githubName}</p></br>`;
   } else if (employee.acquirePosition() === "Intern") {
-    return `<li class="list-group-item">${employee.school}</li>`;
+    return `<p class="card-text">${employee.school}</p></br>`;
   }
 }
 
 // either make card for each staff position or conditionals
-function makeCard(staff) {
+function makeCard() {
   let cardHTML = "";
   // loop
   // conditional in for each loop
-  staff.forEach((staff) => {
+  officeStaff.forEach((employee) => {
     console.log();
     // this will be a div with css attributes
-    cardHTML += `<div class="card" style="width: 18rem;">
-    <div class="card-header">${answers.name}</br>
-    </div>
-    <ul class="list-group list-group-flush">
-        <li class="list-group-item">${answers.email}</li>
-        <li class="list-group-item">${answers.employeeId}</li>
-        <li class="list-group-item">${generateUnique(staff)}</li>
-    </ul>
-    `;
+    cardHTML += `<div class="card m-1 p-1">
+    <h2 class="card-header">${employee.name}</br>
+    </h2>
+    
+        <div class="card-body">
+            <p class="card-text">${employee.email}</p>
+            <p class="card-text">${employee.employeeId}</p>
+            <p class="card-text">${generateUnique(employee)}</p>
+        </div>`;
   });
   return cardHTML;
 }
@@ -167,14 +138,22 @@ const generateHTML = () => {
       <title>Team Profile Generator</title>
       <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css"
           rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3"
-          crossorigin="anonymous">">
+          crossorigin="anonymous">
+      <link rel="stylesheet" href="./assets/css/style.css">
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Abril+Fatface&display=swap" rel="stylesheet">
   </head>
   
   <body>
+  <header class="align-self-center jumbotron">
   <h1>My Staff</h1>
-
+  </header>
+  <div id="staffCardBio" class="no-gutters">
 
   ${makeCard()};
+
+  </div>
   </body>
   
   </html>`;

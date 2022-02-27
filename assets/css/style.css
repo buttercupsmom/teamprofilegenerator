@@ -1,0 +1,25 @@
+:root {
+  font-family: "Abril Fatface", cursive;
+}
+
+.card {
+  margin: 2px 0;
+  border: 2px solid;
+}
+
+.jumbotron {
+  text-align: center;
+  border-radius: 0;
+  border: 4px solid;
+}
+
+.no-gutters {
+  border: 4px solid;
+  margin-right: 0;
+  margin-left: 0;
+}
+#staffCardBio {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}

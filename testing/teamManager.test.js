@@ -1,14 +1,38 @@
-// require
-const Employee = require("./employee");
+const Manager = require("../lib/teamManager");
 
-// Team Manager Class
-class teamManager extends Employee {
-  constructor(name, email, id, officeNumber) {
-    super(name, email, id);
+describe(`manager`, () => {
+  it(`should create a new manager object when initalized`, () => {
+    const manager = new Manager();
+    expect(typeof manager).toBe("object");
+  });
+});
 
-    this.officeNumber = officeNumber;
-    this.position = "Team Manager";
-  }
-}
+it(`should set name via the constructor`, () => {
+  const employee = new Manager("Liz Lemon", 2, "tatertotfreak@30rock.com", 30);
+  expect(employee.name).toBe("Liz Lemon");
+});
 
-module.exports = teamManager;
+it(`should return manager's name when acquireName method is called`, () => {
+  const employee = new Manager("Liz Lemon", 1, "tatertotfreak@30rock.com", 30);
+  expect(employee.acquireName()).toBe("Liz Lemon");
+});
+
+it(`should return the manager's email when acquireEmail method is called`, () => {
+  const employee = new Manager("Liz Lemon", 1, "tatertotfreak@30rock.com", 30);
+  expect(employee.acquireEmail()).toBe("tatertotfreak@30rock.com");
+});
+
+it(`should return the manager's Id when acquireId method is called`, () => {
+  const employee = new Manager("Liz Lemon", 1, "tatertotfreak@30rock.com", 30);
+  expect(employee.acquireId()).toBe(1);
+});
+
+it(`should return the manager's office number when acquireOfficeNumber method is called`, () => {
+  const employee = new Manager("Liz Lemon", 1, "tatertotfreak@30rock.com", 30);
+  expect(employee.acquireOfficeNumber()).toBe(30);
+});
+
+it(`should return the manager's position when acquirePosition method is called`, () => {
+  const employee = new Manager("Liz Lemon", 1, "tatertotfreak@30rock.com", 30);
+  expect(employee.acquirePosition()).toBe("Manager");
+});

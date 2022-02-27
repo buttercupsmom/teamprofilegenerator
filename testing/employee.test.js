@@ -1,31 +1,33 @@
 const Employee = require("../lib/employee");
 
-describe("Employee", () => {
-  describe("acquireName", () => {
-    it("should return the Employee name", () => {
-      const expect = "Bob";
-      const result = new Employee("Bob", 3, "bob@mail.com").acquireName;
-      expect(result).toEqual(expect);
-    });
+describe("employee", () => {
+  it(`should create a new employee object when initalized`, () => {
+    const employee = new Employee();
+    expect(typeof employee).toBe("object");
   });
 });
 
-describe("email", () => {
-  describe("acquireEmail", () => {
-    it("should return the email of Employee", () => {
-      const expect = "bob@mail.com";
-      const result = new Employee("Bob", 3, "bob@mail.com").acquireEmail;
-      expect(result).toEqual(expect);
-    });
-  });
+it(`should set name via the constructor`, () => {
+  const employee = new Employee("Liz Lemon", 1, "lizlemon@30rock.com");
+  expect(employee.name).toBe("Liz Lemon");
 });
 
-describe("id", () => {
-  describe("acquireId", () => {
-    it("should return the id of Employee", () => {
-      const expect = "3";
-      const result = new Employee("Bob", 1, "bob@mail.com").acquireId;
-      expect(result).toEqual(expect);
-    });
-  });
+it(`should return the name when acquireName method is called`, () => {
+  const employee = new Employee("Liz Lemon", 1, "lizlemon@30rock.com");
+  expect(employee.acquireName()).toBe("Liz Lemon");
+});
+
+it(`should return the employee's email when acquireEmail method is called`, () => {
+  const employee = new Employee("Liz Lemon", 1, "lizlemon@30rock.com");
+  expect(employee.acquireEmail()).toBe("lizlemon@30rock.com");
+});
+
+it(`should return the employee's Id when acquireId method is called`, () => {
+  const employee = new Employee("Liz Lemon", 1, "lizlemon@30rock.com");
+  expect(employee.acquireId()).toBe(1);
+});
+
+it(`should return the employee's position when acquirePosition method is called`, () => {
+  const employee = new Employee("Liz Lemon", 1, "lizlemon@30rock.com");
+  expect(employee.acquirePosition()).toBe("Employee");
 });

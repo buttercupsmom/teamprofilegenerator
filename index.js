@@ -6,11 +6,7 @@ const Employee = require("./lib/employee");
 const Manager = require("./lib/teamManager");
 const Engineer = require("./lib/engineer");
 const Intern = require("./lib/intern");
-// // positions
-// const officeManager = Manager;
-// const officeEngineer = Engineer;
-// const officeIntern = Intern;
-// Employee to be pushed into empty array
+
 const officeStaff = [];
 
 // prompt for position
@@ -21,17 +17,17 @@ function officeData() {
         type: "list",
         name: "position",
         message: "What is the title of the employee you wish to add?",
-        choices: ["Manager", "Engineer", "Intern", "Build Your Team!"],
+        choices: ["Engineer", "Intern", "Build Your Team!"],
       },
       {
         type: "input",
         name: "name",
-        message: "What is your name?",
-        validate: (acquireName) => {
-          if (acquireName) {
+        message: "What their name?",
+        validate: (nameInput) => {
+          if (nameInput) {
             return true;
           } else {
-            console.log("Enter your name!");
+            console.log("Please enter your employee's name.");
             return false;
           }
         },
@@ -39,12 +35,12 @@ function officeData() {
       {
         type: "input",
         name: "email",
-        message: "What is your email?",
-        validate: (acquireEmail) => {
-          if (acquireEmail) {
+        message: "What is their email?",
+        validate: (email) => {
+          if (email) {
             return true;
           } else {
-            console.log("Enter your Email!");
+            console.log("Please enter your employee's email.");
             return false;
           }
         },
@@ -52,9 +48,9 @@ function officeData() {
       {
         type: "input",
         name: "employeeId",
-        message: "Please enter your employee Id.",
-        validate: (acquireId) => {
-          if (acquireId) {
+        message: "Please your employee's Id.",
+        validate: (employeeId) => {
+          if (employeeId) {
             return true;
           } else {
             console.log("Please enter your employee ID!");
@@ -67,8 +63,8 @@ function officeData() {
         name: "officeNumber",
         when: (answers) => answers.position === "Manager",
         message: "Please enter your office number.",
-        validate: (officeNumber) => {
-          if (officeNumber) {
+        validate: (acquireofficeNumber) => {
+          if (acquireofficeNumber) {
             return true;
           } else {
             console.log("Enter your office number.");
@@ -80,77 +76,62 @@ function officeData() {
         type: "input",
         name: "githubName",
         when: (answers) => answers.position === "Engineer",
-        message: "Please enter your GitHub username.",
+        message: "Please enter your employee's GitHub username.",
       },
       {
         type: "input",
         name: "school",
         when: (answers) => answers.position === "Intern",
-        message: "Please enter your College or University.",
+        message: "Please enter your intern's College or University.",
       },
     ])
     .then((answers) => {
       // questions response answers
-      if (answers.position.addNewPosition === "Manager") {
+      if (answers.position === "Manager") {
         // create manager object
-        const Manager = new Manager(
+        const manager = new Manager(
           answers.name,
           answers.email,
-          answers.id,
+          answers.employeeId,
           answers.officeNumber
         );
-        officeStaff.push(Manager);
+        officeStaff.push(manager);
         officeData();
-      } else if (answers.position.addNewPosition === "Engineer") {
-        const Engineer = new Engineer(
+      } else if (answers.position === "Engineer") {
+        const engineer = new Engineer(
           answers.name,
           answers.email,
-          answers.id,
+          answers.employeeId,
           answers.githubName
         );
-
-        officeStaff.push(Engineer);
+        officeStaff.push(engineer);
         officeData();
-      } else if (answers.position.addNewPosition === "Intern") {
-        const Intern = new Intern(
+      } else if (answers.position === "Intern") {
+        const intern = new Intern(
           answers.name,
           answers.email,
-          answers.id,
+          answers.employeeId,
           answers.school
         );
-        officeStaff.push(Intern);
+        officeStaff.push(intern);
         officeData();
+      } else {
+        const staffAssemble = generateHTML();
+
+        fs.writeFile("./output/index.html", staffAssemble, (err) =>
+          err ? console.log(err) : console.log("HTML generated successfully!")
+        );
       }
     });
-  officeData();
 }
-// Prompt prompt menu
-function promptMenu() {
-  if (officeData === true) {
-    (userChoice) => {
-      switch (userChoice.menu) {
-        case "Add Engineer":
-          officeData(Engineer);
-          break;
-        case "Add Intern":
-          officeData(Intern);
-          break;
-        default:
-          createStaff();
-      }
-    };
-  }
-}
+
 function generateUnique() {
   if (employee.acquirePosition() === "Manager") {
-    return ` <li class="list-group-item">${employee.officeNumber}</li>
-    `;
+    return `<li class="list-group-item">${employee.officeNumber}</li>`;
   } else if (employee.acquirePosition() === "Engineer") {
-    return `<li class="list-group-item">
-    ${employee.githubName}</li>`;
+    return `<li class="list-group-item">${employee.githubName}</li>`;
   } else if (employee.acquirePosition() === "Intern") {
-    return `<li class="list-group-item">
-    ${employee.githubName}</li>`;
+    return `<li class="list-group-item">${employee.school}</li>`;
   }
 }
 
@@ -163,22 +144,20 @@ function makeCard(staff) {
     console.log();
     // this will be a div with css attributes
     cardHTML += `<div class="card" style="width: 18rem;">
-    <div class="card-header">
-        ${answers.name}</br>
+    <div class="card-header">${answers.name}</br>
     </div>
     <ul class="list-group list-group-flush">
         <li class="list-group-item">${answers.email}</li>
         <li class="list-group-item">${answers.employeeId}</li>
-        <li class="list-group-item">${answers.officeNumber}</li>
-        ${generateSpecial(staff)}
+        <li class="list-group-item">${generateUnique(staff)}</li>
     </ul>
     `;
   });
   return cardHTML;
 }
 
-const generateHTML = (employee) => {
-  const fileHTML = `<!DOCTYPE html>
+const generateHTML = () => {
+  return `<!DOCTYPE html>
   <html lang="en">
   
   <head>
@@ -192,28 +171,13 @@ const generateHTML = (employee) => {
   </head>
   
   <body>
-  <div class="card" style="width: 18rem;">
-  <div class="card-header">
-      ${employee.name}</br>
-  </div>
-  <ul class="list-group list-group-flush">
-      <li class="list-group-item">${employee.email}</li>
-      <li class="list-group-item">${employee.employeeId}</li>
-      <li class="list-group-item">${employee.officeNumber}</li>
-  </ul>
+  <h1>My Staff</h1>
+
+
+  ${makeCard()};
   </body>
   
   </html>`;
-  fs.writeFile("./output/index.html", fileHTML, (err) =>
-    err ? console.log(err) : console.log("HTML generated successfully!")
-  );
-  return makeCard();
 };
 
-const createStaff = () => {
-  console.log(`Staff Assembled!`);
-  generateHTML();
-};
-
-// module.exports = inquirer;
-promptMenu();
+officeData();

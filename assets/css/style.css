@@ -18,6 +18,12 @@
   margin-right: 0;
   margin-left: 0;
 }
+
+.uniquePosition {
+  margin: 4px 0;
+  border: 1px solid;
+}
+
 #staffCardBio {
   display: flex;
   justify-content: space-evenly;

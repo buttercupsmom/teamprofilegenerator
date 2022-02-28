@@ -7,7 +7,7 @@
 - [Description](./README.md#description)
 - [Installation](./README.md#installation)
 - [Usage](./README.md#usage)
-- [Screen-Recording](./README.md#screen-recording)
+- [Screenshots](./README.md#screenshots)
 - [License](./README.md#license)
 - [Author](./README.md#author)
 - [Links](./README.md#links)
@@ -37,7 +37,11 @@ Open terminal, then
 $node index
 ```
 
-## Screen-Recording
+## Screenshots
+
+![GeneratedHtml](./assets/generatedhtml.png)
+
+- Here is the instructional demo video: [Google Drive](https://drive.google.com/file/d/18SXSItyqYPOex10j7ur2XyUDcX2W4NNZ/view?usp=sharing)
 
 ## License
 
